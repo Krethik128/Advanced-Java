@@ -1,96 +1,79 @@
 package com.gevernova.movingbookingsystem.model;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-
-import static com.gevernova.IDGenerator.generateID;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Show {
-    public List<Seat> seats;
-    private Movie movie;
-    private String showId;
-    private int showDuration;
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
-    private boolean isShowActive;
-    private boolean isShowFull;
-    private int seatsAvailable;
-    private final int  MAX_SEATS_AVAILABLE=100;
+    private String id;
+    private Movie movie; // Association with Movie
+    private Multiplex multiplex; // Association with Multiplex
+    private Screen screen; // Association with Screen
+    private Date showTime;
+    // Map to store seat status for this specific show (Seat ID -> SeatStatus)
+    private Map<String, SeatStatus> seatStatuses;
 
-
-    public Show() {
-        this.showId = generateID();
-        this.seats = new ArrayList<>(MAX_SEATS_AVAILABLE);
-        this.isShowActive = true; // A new show is active by default
-        this.isShowFull = false;  // A new show is not full by default
-        this.seatsAvailable = 0; // Seats will be added and counted by BookingServices
-    }
-
-    public Show(Movie movie, LocalDateTime startTime, LocalDateTime endTime) {
-        this(); // Call the default constructor for common initializations
+    public Show(String id, Movie movie, Multiplex multiplex, Screen screen, Date showTime) {
+        this.id = id;
         this.movie = movie;
-        this.showDuration = movie.getMovieDuration(); // Use duration from the Movie object
-        this.startTime = startTime;
-        this.endTime = endTime;
-        // isShowActive, isShowFull, seats, showId, and seatsAvailable are initialized by the default constructor
+        this.multiplex = multiplex;
+        this.screen = screen;
+        this.showTime = showTime;
+        this.seatStatuses = new HashMap<>();
+        // Initialize all seats in the screen as AVAILABLE for this show
+        for (Seat seat : screen.getSeats()) {
+            seatStatuses.put(seat.getId(), new SeatStatus(seat, SeatStatus.Status.AVAILABLE));
+        }
     }
 
-    public void setShowFull(boolean showFull) {
-        isShowFull = showFull;
-    }
-
-    public void setSeatsAvailable(int seatsAvailable) {
-        this.seatsAvailable = seatsAvailable;
-    }
-
-    public void setShowActive(boolean showActive) {
-        isShowActive = showActive;
+    public String getId() {
+        return id;
     }
 
     public Movie getMovie() {
         return movie;
     }
 
-    public int getShowDuration() {
-        return showDuration;
+    public Multiplex getMultiplex() {
+        return multiplex;
     }
 
-    public LocalDateTime getStartTime() {
-        return startTime;
+    public Screen getScreen() {
+        return screen;
     }
 
-    public LocalDateTime getEndTime() {
-        return endTime;
+    public Date getShowTime() {
+        return showTime;
     }
 
-    public boolean isShowFull() {
-        return isShowFull;
+    public Map<String, SeatStatus> getSeatStatuses() {
+        return seatStatuses;
     }
 
-    public boolean isShowActive() {
-        return isShowActive;
+    public SeatStatus getSeatStatus(String seatId) {
+        return seatStatuses.get(seatId);
     }
 
-    public int getSeatsAvailable() {
-        return seatsAvailable;
+    public void updateSeatStatus(String seatId, SeatStatus.Status newStatus, String userId) {
+        SeatStatus currentSeatStatus = seatStatuses.get(seatId);
+        if (currentSeatStatus != null) {
+            currentSeatStatus.setStatus(newStatus);
+            if (newStatus == SeatStatus.Status.HELD) {
+                currentSeatStatus.setHeldByUserId(userId);
+            } else {
+                currentSeatStatus.setHeldByUserId(null); // Clear held status if not held
+            }
+        }
     }
 
-    public int getMAX_SEATS_AVAILABLE() {
-        return MAX_SEATS_AVAILABLE;
-    }
-    public String getShowId() {
-        return showId;
-    }
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Show show = (Show) o;
-        return showId.equals(show.showId);
-    }
-    @Override
-    public int hashCode() {
-        return showId.hashCode();
+    public String toString() {
+        return "Show{" +
+                "id='" + id + '\'' +
+                ", movie=" + movie.getTitle() +
+                ", multiplex=" + multiplex.getName() +
+                ", screen=" + screen.getName() +
+                ", showTime=" + showTime +
+                '}';
     }
 }

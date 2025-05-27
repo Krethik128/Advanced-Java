@@ -1,38 +1,57 @@
 package com.gevernova.movingbookingsystem.model;
 
-import static com.gevernova.IDGenerator.generateID;
+import java.util.Date;
 
 public class Ticket {
-    Show show;
-    private final String ticketId;
-    private final String showId;
-    private final String seatId;
+    private String id;
+    private User user; // Association with User
+    private Show show; // Association with Show
+    private Seat seat; // Association with Seat
+    private Date bookingTime;
+    private double price;
 
+    public Ticket(String id, User user, Show show, Seat seat, double price) {
+        this.id = id;
+        this.user = user;
+        this.show = show;
+        this.seat = seat;
+        this.bookingTime = new Date(); // Current time
+        this.price = price;
+    }
 
-    public Ticket(String seatId,String showId) {
-        show =new Show();
-        this.ticketId = generateID();
-        this.showId = show.getShowId();
-        this.seatId = seatId;
+    public String getId() {
+        return id;
     }
-    public String getTicketId() {
-        return ticketId;
+
+    public User getUser() {
+        return user;
     }
-    public String getShowId() {
-        return showId;
+
+    public Show getShow() {
+        return show;
     }
-    public String getSeatId() {
-        return seatId;
+
+    public Seat getSeat() {
+        return seat;
     }
+
+    public Date getBookingTime() {
+        return bookingTime;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Ticket ticket = (Ticket) o;
-        return ticketId.equals(ticket.ticketId);
-    }
-    @Override
-    public int hashCode() {
-        return ticketId.hashCode();
+    public String toString() {
+        return "Ticket{" +
+                "id='" + id + '\'' +
+                ", user=" + user.getUsername() +
+                ", movie=" + show.getMovie().getTitle() +
+                ", showTime=" + show.getShowTime() +
+                ", seat=" + seat.getId() +
+                ", price=" + price +
+                '}';
     }
 }

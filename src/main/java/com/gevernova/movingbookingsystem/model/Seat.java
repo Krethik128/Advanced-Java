@@ -1,43 +1,32 @@
 package com.gevernova.movingbookingsystem.model;
 
 public class Seat {
-    private String seatNumber;
-    private final Category category;
-    private SeatStatus seatStatus;
+    private String id; // Unique seat identifier (e.g., A1, B5)
+    private String rowIdentifier;
+    private int columnNumber;
 
-    public Seat(Category category, String seatNumber)  {
-        this.category = category;
-        this.seatNumber = seatNumber;
-        this.seatStatus = seatStatus.AVAILABLE;
+    public Seat(String id, String rowIdentifier, int columnNumber) {
+        this.id = id;
+        this.rowIdentifier = rowIdentifier;
+        this.columnNumber = columnNumber;
     }
 
-    public String getSeatNumber() {
-        return seatNumber;
+    public String getId() {
+        return id;
     }
 
-    public SeatStatus getSeatStatus() {
-        return seatStatus;
+    public String getRowIdentifier() {
+        return rowIdentifier;
     }
 
-    public void setSeatStatus(SeatStatus seatStatus) { // Setter allows updating seat status
-        this.seatStatus = seatStatus;
-    }
-
-    public Category getCategory() {
-        return category;
+    public int getColumnNumber() {
+        return columnNumber;
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Seat seat = (Seat) o;
-        return seatNumber.equals(seat.seatNumber);
+    public String toString() {
+        return "Seat{" +
+                "id='" + id + '\'' +
+                '}';
     }
-
-    @Override
-    public int hashCode() {
-        return seatNumber.hashCode();
-    }
-
 }

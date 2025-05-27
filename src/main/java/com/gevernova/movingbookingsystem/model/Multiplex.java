@@ -1,52 +1,55 @@
 package com.gevernova.movingbookingsystem.model;
 
-import com.gevernova.movingbookingsystem.exceptions.ShowLimitExceeded;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Multiplex {
-    List<Show> shows;
+    private String id;
+    private String name;
+    private String address;
+    private List<Screen> screens; // List of screens within this multiplex
 
-    private final int maxShowSize=25;
-    private final String multiplexName;
-    Map<String,Movie> showMap;
-
-    public Multiplex(String multiplexName) {
-        this.multiplexName = multiplexName;
-        shows=new ArrayList<>(25);
-        showMap= new HashMap<>();
+    public Multiplex(String id, String name, String address) {
+        this.id = id;
+        this.name = name;
+        this.address = address;
+        this.screens = new ArrayList<>();
     }
 
-    public void addShow(Show show,Movie movie) throws ShowLimitExceeded {
-        if(shows.size()<maxShowSize){
-                shows.add(show);
-                showMap.put(show.getShowId(),movie);
-        }else{
-            throw new ShowLimitExceeded("Maximum number of shows reached");
-        }
+    public String getId() {
+        return id;
     }
 
-    public void removeShow(String showId){
-        shows.removeIf(show -> show.getShowId().equals(showId));
-        showMap.remove(showId);
+    public String getName() {
+        return name;
     }
 
-    public boolean isShowPresent(String showId){
-        return showMap.containsKey(showId);
+    public String getAddress() {
+        return address;
     }
 
-    public Movie getMovie(String showId){
-        return showMap.get(showId);
-    }
-    public List<Show> getShows() {
-        return shows;
-    }
-    public String getMultiplexName() {
-        return multiplexName;
+    public List<Screen> getScreens() {
+        return screens;
     }
 
-    public Optional<Show> getShowById(String showId) {
-        return shows.stream().filter(show -> show.getShowId().equals(showId)).findFirst();
+    public void addScreen(Screen screen) {
+        this.screens.add(screen);
+    }
+
+    public Screen getScreenById(String screenId) {
+        return screens.stream()
+                .filter(s -> s.getId().equals(screenId))
+                .findFirst()
+                .orElse(null);
+    }
+
+    @Override
+    public String toString() {
+        return "Multiplex{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", screens=" + screens.size() +
+                '}';
     }
 }
-

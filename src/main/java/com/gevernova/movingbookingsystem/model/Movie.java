@@ -1,31 +1,63 @@
 package com.gevernova.movingbookingsystem.model;
 
-import com.gevernova.movingbookingsystem.exceptions.InvalidMovieDetails;
-
-import static com.gevernova.IDGenerator.generateID;
-
 public class Movie {
-    private final String movieName;
-    private final int movieDuration;
-    private final String movieId;
+    private String id;
+    private String title;
+    private String description;
+    private int durationMinutes;
+    private Category category; // Association with Category
 
-    public Movie(String movieName, int movieDuration) throws InvalidMovieDetails {
-        if(movieName.isEmpty() ){
-            throw new InvalidMovieDetails("Movie name cannot be empty");
-        }else if(movieDuration<=0){
-            throw new InvalidMovieDetails("Move movie details");
-        }
-        this.movieId = generateID();
-        this.movieName = movieName;
-        this.movieDuration = movieDuration;
+    public Movie(String id, String title, String description, int durationMinutes, Category category) {
+        this.id = id;
+        this.title = title;
+        this.description = description;
+        this.durationMinutes = durationMinutes;
+        this.category = category;
     }
-    public String getMovieId() {
-        return movieId;
+
+    public String getId() {
+        return id;
     }
-    public String getMovieName() {
-        return movieName;
+
+    public String getTitle() {
+        return title;
     }
-    public int getMovieDuration() {
-        return movieDuration;
+
+    public String getDescription() {
+        return description;
+    }
+
+    public int getDurationMinutes() {
+        return durationMinutes;
+    }
+
+    public Category getCategory() {
+        return category.toString() == null ? null : category;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setDurationMinutes(int durationMinutes) {
+        this.durationMinutes = durationMinutes;
+    }
+
+    public void setCategory(Category category) {
+        this.category = category;
+    }
+
+    @Override
+    public String toString() {
+        return "Movie{" +
+                "id='" + id + '\'' +
+                ", title='" + title + '\'' +
+                ", durationMinutes=" + durationMinutes +
+                ", category=" + (category != null ? category.getName() : "N/A") +
+                '}';
     }
 }
