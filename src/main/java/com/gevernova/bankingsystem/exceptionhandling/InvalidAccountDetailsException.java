@@ -1,4 +1,4 @@
-package com.gevernova.bankingsystem.exception;
+package com.gevernova.bankingsystem.exceptionhandling;
 
 public class InvalidAccountDetailsException extends Exception {
     public InvalidAccountDetailsException(String message) {

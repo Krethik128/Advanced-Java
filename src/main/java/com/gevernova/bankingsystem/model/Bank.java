@@ -1,118 +1,98 @@
+// src/main/java/com/gevernova/bankingsystem/model/Bank.java
 package com.gevernova.bankingsystem.model;
 
-import com.gevernova.bankingsystem.exception.AccountNotFoundException;
-import com.gevernova.bankingsystem.exception.InvalidBalanceException;
-import com.gevernova.bankingsystem.service.Transaction;
-
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Scanner;
+import com.gevernova.bankingsystem.exceptionhandling.AccountNotFoundException;
+import com.gevernova.bankingsystem.exceptionhandling.InvalidBalanceException;
+import com.gevernova.bankingsystem.service.*; // Import all service classes
+import java.util.*;
+import java.util.stream.Collectors; // For stream operations if needed
 
 public class Bank {
-    private final Map<String,Account> accounts;
+    private final Map<String, Account> accounts;
+    private final List<ITransaction> transactionHistory; // To store history
+    private final TransactionProcessor transactionProcessor; // The new processor
 
-    Transaction transaction;
     public Bank() {
         this.accounts = new HashMap<>();
-        transaction = new Transaction();
+        this.transactionHistory = new ArrayList<>();
+        this.transactionProcessor = new TransactionProcessor(); // Initialize the processor
     }
 
     public boolean isAccountPresent(String accountNumber) {
-       return accounts.containsKey(accountNumber);
+        return accounts.containsKey(accountNumber);
     }
 
     public void addAccount(Account account) throws IllegalArgumentException {
-        if(!accounts.containsKey(account.getAccountNumber())){
-            accounts.put(account.getAccountNumber(),account);
-        }
-        else{
+        if (accounts.containsKey(account.getAccountNumber())) {
             throw new IllegalArgumentException("Account number already exists");
         }
+        accounts.put(account.getAccountNumber(), account);
+        System.out.println("Account added: " + account.getAccountNumber() + " for " + account.getAccountHolderName() + " (Type: " + account.getAccountType() + ").");
     }
 
-    public void removeAccount(String accountNumber) throws IllegalArgumentException {
-        if(accounts.containsKey(accountNumber)){
-            accounts.remove(accountNumber);
-        }else{
-            throw new IllegalArgumentException("Account does not exist in Database");
+    public void removeAccount(String accountNumber) throws AccountNotFoundException {
+        if (!accounts.containsKey(accountNumber)) {
+            throw new AccountNotFoundException("Account does not exist in Database");
         }
+        accounts.remove(accountNumber);
+        System.out.println("Account " + accountNumber + " removed successfully.");
     }
 
     public Account getAccount(String accountNumber) throws AccountNotFoundException {
-        if(accounts.containsKey(accountNumber)){
-            return accounts.get(accountNumber);
+        if (!accounts.containsKey(accountNumber)) {
+            throw new AccountNotFoundException("Account " + accountNumber + " does not exist in Database");
         }
-        else{
-            throw new AccountNotFoundException("Account does not exist in Database");
-        }
+        return accounts.get(accountNumber);
     }
 
-    public List<String> getAllAccountsNumbers() {
-        return accounts.values()
-                .stream()
-                .map(Account::getAccountNumber)
-                .toList();
+    public List<String> getAllAccountNumbers() {
+        return accounts.keySet().stream().collect(Collectors.toList());
     }
 
-    public void makeTransaction() {
-        Scanner scanner = new Scanner(System.in);
+    // New method to execute any ITransaction (OCP)
+    public void executeTransaction(ITransaction transaction) throws InvalidBalanceException, IllegalArgumentException {
+        transactionProcessor.process(transaction); // Use the processor
+        transactionHistory.add(transaction); // Add to history
+        System.out.println("Transaction completed: " + transaction.getTransactionType());
+    }
 
-        System.out.println("Enter your account number:");
-        String accountNumber = scanner.nextLine();
+    // Methods corresponding to the test cases for clarity and direct usage
+    public void performDeposit(String accountNumber, double amount) throws AccountNotFoundException, InvalidBalanceException, IllegalArgumentException {
+        Account account = getAccount(accountNumber);
+        ITransaction depositTransaction = new DepositTransaction(account, amount);
+        executeTransaction(depositTransaction);
+    }
 
-        Account fromAccount = accounts.get(accountNumber); //
-        if (fromAccount == null) {
-            System.out.println("Account not found.");
+    public void performWithdrawal(String accountNumber, double amount) throws AccountNotFoundException, InvalidBalanceException, IllegalArgumentException {
+        Account account = getAccount(accountNumber);
+        ITransaction withdrawalTransaction = new WithdrawalTransaction(account, amount);
+        executeTransaction(withdrawalTransaction);
+    }
+
+    public void performTransfer(String fromAccountNumber, String toAccountNumber, double amount) throws AccountNotFoundException, InvalidBalanceException, IllegalArgumentException {
+        Account fromAccount = getAccount(fromAccountNumber);
+        Account toAccount = getAccount(toAccountNumber);
+        ITransaction transferTransaction = new TransferTransaction(fromAccount, toAccount, amount);
+        executeTransaction(transferTransaction);
+    }
+
+    public void printTransactionHistory() {
+        System.out.println("\n=== Transaction History ===");
+        if (transactionHistory.isEmpty()) {
+            System.out.println("No transactions recorded.");
             return;
         }
-
-        System.out.println("What type of transaction would you like to make?");
-        System.out.println("1. Deposit");
-        System.out.println("2. Withdrawal");
-        System.out.println("3. Transfer");
-        int transactionType = scanner.nextInt();
-        scanner.nextLine(); // consume leftover newline after reading int
-
-        try {
-            switch (transactionType) {
-                case 1:
-                    System.out.println("Enter deposit amount:");
-                    double depositAmount = scanner.nextDouble();
-                    scanner.nextLine(); // consume leftover newline
-                    transaction.deposit(fromAccount, depositAmount); // Use the modified deposit method
-                    break;
-
-                case 2:
-                    System.out.println("Enter withdrawal amount:");
-                    double withdrawAmount = scanner.nextDouble();
-                    scanner.nextLine(); // consume leftover newline
-                    transaction.withdraw(fromAccount, withdrawAmount); // Use the modified withdraw method
-                    break;
-
-                case 3:
-                    System.out.println("Enter recipient account number:");
-                    String toAccountNumber = scanner.nextLine();
-                    Account toAccount = accounts.get(toAccountNumber); //
-
-                    if (toAccount == null) {
-                        System.out.println("Recipient account not found.");
-                        break;
-                    }
-
-                    System.out.println("Enter transfer amount:");
-                    double transferAmount = scanner.nextDouble();
-                    scanner.nextLine(); // consume leftover newline
-                    transaction.transfer(fromAccount, toAccount, transferAmount); // Use the new transfer method
-                    break;
-
-                default:
-                    System.out.println("Invalid transaction type.");
-                    break;
-            }
-        } catch (InvalidBalanceException | IllegalArgumentException e) { // Catch specific exceptions
-            System.out.println("Transaction failed: " + e.getMessage()); //
+        for (ITransaction transaction : transactionHistory) {
+            System.out.println("- " + transaction.getDescription());
         }
     }
 
+    public void printAllAccounts() {
+        System.out.println("\n=== All Accounts ===");
+        if (accounts.isEmpty()) {
+            System.out.println("No accounts in the bank.");
+            return;
+        }
+        accounts.values().forEach(System.out::println);
+    }
 }
