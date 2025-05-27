@@ -7,6 +7,12 @@ public abstract class Vehicle {
     private double basePricePerDay;
 
     public Vehicle(String vehicleId, String brand, String model, double basePricePerDay) {
+        if (vehicleId == null || vehicleId.trim().isEmpty() ||
+                brand == null || brand.trim().isEmpty() ||
+                model == null || model.trim().isEmpty() ||
+                basePricePerDay <= 0) {
+            throw new IllegalArgumentException("Invalid vehicle parameters during creation.");
+        }
         this.vehicleId = vehicleId;
         this.brand = brand;
         this.model = model;

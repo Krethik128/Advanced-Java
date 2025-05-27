@@ -1,4 +1,4 @@
-package com.gevernova.vehicelrentalsystem.exceptions;
+package com.gevernova.vehicelrentalsystem.exceptionhandling;
 
 public class VehicleNotFoundException extends RuntimeException {
     public VehicleNotFoundException(String message) {

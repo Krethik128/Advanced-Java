@@ -1,6 +1,5 @@
 package com.gevernova.vehicelrentalsystem.services;
 
-import com.gevernova.vehicelrentalsystem.models.Booking;
 import com.gevernova.vehicelrentalsystem.models.Vehicle;
 
 // PricingStrategy.java

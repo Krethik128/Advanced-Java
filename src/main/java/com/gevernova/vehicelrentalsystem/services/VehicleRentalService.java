@@ -1,84 +1,71 @@
 package com.gevernova.vehicelrentalsystem.services;
 
 // VehicleRentalService.java
-import com.gevernova.vehicelrentalsystem.models.Booking;
+import com.gevernova.vehicelrentalsystem.exceptionhandling.BookingOverlapException;
+import com.gevernova.vehicelrentalsystem.exceptionhandling.InvalidRatingException;
 import com.gevernova.vehicelrentalsystem.models.Vehicle;
 
 import java.time.LocalDateTime;
 import java.util.*;
 
 public class VehicleRentalService {
-    private Map<String, Vehicle> vehicles = new HashMap<>();
-    private Map<String, List<Booking>> bookingsByVehicle = new HashMap<>();
-    private PricingStrategy pricingStrategy = new PerDayPricingStrategy();
+    // Manages the inventory of vehicles. This is VehicleRentalService's core responsibility.
+    private Map<String, Vehicle> vehicles;
+    // Delegates all booking-related operations to BookingService, adhering to SRP.
+    private BookingService bookingService;
 
-    public void addVehicle(Vehicle vehicle) {
+    public VehicleRentalService(PricingStrategy pricingStrategy) {
+        this.vehicles = new HashMap<>();
+        // Inject the pricing strategy into the BookingService, making it flexible (OCP for pricing)
+        this.bookingService = new BookingService(pricingStrategy);
+    }
+
+    public void addVehicle(Vehicle vehicle) throws IllegalArgumentException {
+        if(vehicle.getVehicleId()==null){
+            throw new IllegalArgumentException("Vehicle cannot be null for vehicle creation.");
+        }
+        if (vehicle.getVehicleId() == null || vehicle.getVehicleId().trim().isEmpty()) {
+            throw new IllegalArgumentException("Vehicle ID cannot be null or empty.");
+        }
+        if (vehicles.containsKey(vehicle.getVehicleId())) {
+            throw new IllegalArgumentException("Vehicle with ID " + vehicle.getVehicleId() + " already exists.");
+        }
         vehicles.put(vehicle.getVehicleId(), vehicle);
+        System.out.println("Added vehicle: " + vehicle.getVehicleType() + " " + vehicle.getBrand() + " " + vehicle.getModel() + " (ID: " + vehicle.getVehicleId() + ")");
     }
 
     public Vehicle getVehicle(String vehicleId) {
         return vehicles.get(vehicleId);
     }
 
-    public void setPricingStrategy(PricingStrategy strategy) {
-        this.pricingStrategy = strategy;
-    }
-
     public Booking createBooking(String bookingId, String vehicleId, String customerId,
-                                 LocalDateTime startTime, LocalDateTime endTime) throws Exception {
+                                 LocalDateTime startTime, LocalDateTime endTime) throws BookingOverlapException, IllegalArgumentException {
         Vehicle vehicle = getVehicle(vehicleId);
         if (vehicle == null) {
-            throw new Exception("Vehicle not found: " + vehicleId);
+            throw new IllegalArgumentException("Vehicle not found with ID: " + vehicleId);
         }
-
-        Booking newBooking = new Booking(bookingId, vehicleId, customerId, startTime, endTime);
-
-        // Check for overlapping bookings
-        List<Booking> existingBookings = bookingsByVehicle.getOrDefault(vehicleId, new ArrayList<>());
-        for (Booking existing : existingBookings) {
-            if (newBooking.overlaps(existing)) {
-                throw new Exception("Booking overlap detected for vehicle: " + vehicleId);
-            }
-        }
-
-        // Calculate price
-        double price = pricingStrategy.calculatePrice(vehicle, newBooking);
-        newBooking.setTotalPrice(price);
-
-        // Add booking
-        existingBookings.add(newBooking);
-        bookingsByVehicle.put(vehicleId, existingBookings);
-
-        return newBooking;
+        // Delegate the complex booking creation and overlap checking logic to BookingService (SRP)
+        return bookingService.createBooking(bookingId, vehicleId, customerId, startTime, endTime, vehicle);
     }
 
-    public void completeBooking(String bookingId, int rating) throws Exception {
-        if (rating < 1 || rating > 5) {
-            throw new Exception("Invalid rating: " + rating + ". Must be 1-5.");
-        }
-
-        for (List<Booking> bookings : bookingsByVehicle.values()) {
-            for (Booking booking : bookings) {
-                if (booking.getBookingId().equals(bookingId)) {
-                    booking.setCustomerRating(rating);
-                    return;
-                }
-            }
-        }
-        throw new Exception("Booking not found: " + bookingId);
+    public void completeBooking(String bookingId, int rating, double distanceTraveled) throws InvalidRatingException, IllegalArgumentException {
+        // Delegate booking completion to BookingService (SRP)
+        bookingService.completeBooking(bookingId, rating, distanceTraveled);
     }
 
     public List<Booking> getBookingsForVehicle(String vehicleId) {
-        return bookingsByVehicle.getOrDefault(vehicleId, new ArrayList<>());
+        return bookingService.getBookingsForVehicle(vehicleId);
     }
 
     public double getAverageRating(String vehicleId) {
-        List<Booking> bookings = getBookingsForVehicle(vehicleId);
-        return bookings.stream()
-                .filter(b -> b.getCustomerRating() > 0)
-                .mapToInt(Booking::getCustomerRating)
-                .average()
-                .orElse(0.0);
+        return bookingService.getAverageRating(vehicleId);
+    }
+    /**
+     * Retrieves a collection of all vehicles currently in the rental system.
+     * @return A collection of Vehicle objects.
+     */
+    public Collection<Vehicle> getAllVehicles() {
+        return vehicles.values();
     }
 }
 
