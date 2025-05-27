@@ -1,20 +1,20 @@
 package com.gevernova.onlinebooksystem.models;
 
+import java.util.Objects;
+import java.util.Random;
+
 public class Book {
     private String isbn;
-    private String title;
-    private String author;
+    private final String title;
+    private final Author author;
     private double price;
     private Category category;
 
-    public Book(String isbn, String title, String author, double price, Category category) {
-        if (isbn == null || isbn.trim().isEmpty()) {
-            throw new IllegalArgumentException("ISBN cannot be null or empty.");
-        }
+    public Book( String title, Author author, double price, Category category) {
         if (title == null || title.trim().isEmpty()) {
             throw new IllegalArgumentException("Title cannot be null or empty.");
         }
-        if (author == null || author.trim().isEmpty()) {
+        if (author == null ) {
             throw new IllegalArgumentException("Author cannot be null or empty.");
         }
         if (price <= 0) {
@@ -23,16 +23,21 @@ public class Book {
         if (category == null) {
             throw new IllegalArgumentException("Category cannot be null.");
         }
-        this.isbn = isbn;
+        this.isbn = generateIsbn(title);
         this.title = title;
         this.author = author;
         this.price = price;
         this.category = category;
     }
+    public String generateIsbn(String title) {
+        Random random=new Random();
+       return title+random.nextInt(100);
+    }
+
 
     public String getIsbn() { return isbn; }
     public String getTitle() { return title; }
-    public String getAuthor() { return author; }
+    public String getAuthorName() { return author.getName(); }
     public double getPrice() { return price; }
     public Category getCategory() { return category; }
 

@@ -23,7 +23,7 @@ public class BookRepository {
             throw new IllegalArgumentException("Book with ISBN " + book.getIsbn() + " already exists.");
         }
         booksByIsbn.put(book.getIsbn(), book);
-        System.out.println("Added book: " + book.getTitle() + " by " + book.getAuthor());
+        System.out.println("Added book: " + book.getTitle() + " by " + book.getAuthorName());
     }
 
     /**
@@ -74,7 +74,7 @@ public class BookRepository {
         }
         final String lowerCaseAuthor = author.toLowerCase();
         return booksByIsbn.values().stream()
-                .filter(book -> book.getAuthor().toLowerCase().contains(lowerCaseAuthor))
+                .filter(book -> book.getAuthorName().toLowerCase().contains(lowerCaseAuthor))
                 .collect(Collectors.toList());
     }
 

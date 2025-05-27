@@ -19,7 +19,7 @@ public class Bookstore {
 
     public List<Book> searchByAuthor(String authorName) {
         return catalog.stream()
-                .filter(b -> b.getAuthor().getName().equalsIgnoreCase(authorName))
+                .filter(b -> b.getAuthorName().equalsIgnoreCase(authorName))
                 .collect(Collectors.toList());
     }
 

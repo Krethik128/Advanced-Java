@@ -1,5 +1,6 @@
 package com.gevernova.onlinebooksystem.services;
 
+import com.gevernova.onlinebooksystem.models.Author;
 import com.gevernova.onlinebooksystem.models.Book;
 import com.gevernova.onlinebooksystem.models.Category;
 import com.gevernova.onlinebooksystem.models.DiscountStrategy;
@@ -20,9 +21,9 @@ public class OnlineBookstoreService {
 
     // --- Book Management (Delegates to BookRepository) ---
 
-    public void addBook(String isbn, String title, String author, double price, Category category) {
+    public void addBook(String isbn, String title, Author author, double price, Category category) {
         try {
-            Book book = new Book(isbn, title, author, price, category);
+            Book book = new Book( title, author, price, category);
             bookRepository.addBook(book);
         } catch (IllegalArgumentException e) {
             System.err.println("Error adding book: " + e.getMessage());
