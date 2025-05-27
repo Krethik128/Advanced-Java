@@ -1,4 +1,4 @@
-package com.gevernova.onlinebooksystem.model;
+package com.gevernova.onlinebooksystem.models;
 public class Author {
     private String name;
 

@@ -1,12 +1,12 @@
 package onlinebooksystemTests;
 
-import com.gevernova.onlinebooksystem.exceptions.BookNotFoundException;
-import com.gevernova.onlinebooksystem.model.Author;
-import com.gevernova.onlinebooksystem.model.Book;
-import com.gevernova.onlinebooksystem.model.Cart;
-import com.gevernova.onlinebooksystem.services.Category;
-import com.gevernova.onlinebooksystem.services.FlatDiscount;
-import com.gevernova.onlinebooksystem.services.NoDiscount;
+import com.gevernova.onlinebooksystem.exceptionhandling.BookNotFoundException;
+import com.gevernova.onlinebooksystem.models.Author;
+import com.gevernova.onlinebooksystem.models.Book;
+import com.gevernova.onlinebooksystem.models.Cart;
+import com.gevernova.onlinebooksystem.models.Category;
+import com.gevernova.onlinebooksystem.models.FlatDiscount;
+import com.gevernova.onlinebooksystem.models.NoDiscount;
 import com.gevernova.onlinebooksystem.services.PercentageDiscount;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;

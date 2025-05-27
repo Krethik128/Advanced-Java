@@ -1,8 +1,8 @@
 package onlinebooksystemTests;
 
-import com.gevernova.onlinebooksystem.services.DiscountStrategy;
-import com.gevernova.onlinebooksystem.services.FlatDiscount;
-import com.gevernova.onlinebooksystem.services.NoDiscount;
+import com.gevernova.onlinebooksystem.models.DiscountStrategy;
+import com.gevernova.onlinebooksystem.models.FlatDiscount;
+import com.gevernova.onlinebooksystem.models.NoDiscount;
 import com.gevernova.onlinebooksystem.services.PercentageDiscount;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;

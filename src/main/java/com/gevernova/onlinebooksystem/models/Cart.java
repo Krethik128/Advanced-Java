@@ -1,7 +1,6 @@
-package com.gevernova.onlinebooksystem.model;
+package com.gevernova.onlinebooksystem.models;
 
-import com.gevernova.onlinebooksystem.exceptions.BookNotFoundException;
-import com.gevernova.onlinebooksystem.services.DiscountStrategy;
+import com.gevernova.onlinebooksystem.exceptionhandling.BookNotFoundException;
 
 import java.util.*;
 

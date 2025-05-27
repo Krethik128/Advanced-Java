@@ -1,7 +1,6 @@
 package onlinebooksystemTests;
 
-import com.gevernova.onlinebooksystem.model.*;
-import com.gevernova.onlinebooksystem.services.*;
+import com.gevernova.onlinebooksystem.models.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import java.util.List;

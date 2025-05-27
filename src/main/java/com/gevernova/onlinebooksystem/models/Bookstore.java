@@ -1,7 +1,4 @@
-package com.gevernova.onlinebooksystem.model;
-
-import com.gevernova.onlinebooksystem.exceptions.BookNotFoundException;
-import com.gevernova.onlinebooksystem.services.Category;
+package com.gevernova.onlinebooksystem.models;
 
 import java.util.ArrayList;
 import java.util.List;
