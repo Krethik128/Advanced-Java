@@ -13,46 +13,31 @@ The projects within this repository follow a standard Maven/Gradle-like director
     * Manages books, users, and orders for an online bookstore.
     * Supports Browse, cart management, and order placement.
     * Includes robust JUnit test coverage.
-
-* **Employee Management System**
-    * Handles employee records, departments, and roles within an organization.
-    * Allows adding, updating, removing employees, and managing organizational structure.
-    * Features comprehensive JUnit test suites.
+    *  Adheres to the Single Responsibility Principle (SRP) by ensuring each module has a single, clear purpose. Employs the Open/Closed Principle (OCP), particularly in its flexible discount strategy, allowing new discount types to be added without modifying existing code
 
 * **Banking Transaction System**
     * Simulates account management and various financial transactions.
     * Enables deposits, withdrawals, and transfers between accounts.
     * Comes with extensive JUnit test cases for all operations.
+    * Built with the Liskov Substitution Principle (LSP) at its core, our system allows for seamless extension of Accounts into specific types like SavingsAccount and CurrentAccount while maintaining their core functionality. This design, combined with the Open/Closed Principle (OCP), ensures you can easily add new methods or services to BankingServices without ever needing to modify existing, proven code. 
 
 * **Movie Ticket Booking System**
     * Facilitates booking movie tickets, managing showtimes, and seat availability.
     * Supports Browse movies, seat selection, and booking confirmation.
     * Validated by a suite of JUnit tests.
-
-* **Task Scheduler**
-    * Provides tools for creating, managing, and tracking tasks.
-    * Allows task assignment, priority setting, and status updates.
-    * Includes JUnit tests for core scheduling functionalities.
+    * Designed using the Single Responsibility Principle (SRP), separating concerns like movie management, seat allocation, and booking processes into distinct modules. It also adheres to the Open/Closed Principle (OCP), allowing new payment methods or notification types to be integrated seamlessly.
 
 * **E-Commerce Order Processing**
     * Manages products, shopping carts, and automates order processing.
     * Features catalog management, cart operations, and order fulfillment logic.
     * Thoroughly tested with JUnit.
-
-* **Online Course Management**
-    * System for managing courses, student enrollments, and instructor assignments.
-    * Supports course administration, student registration, and progress tracking.
-    * Equipped with JUnit tests for reliability.
-
-* **Feedback Aggregator System**
-    * Collects, categorizes, and analyzes user feedback from various sources.
-    * Enables feedback submission, categorization, and reporting.
-    * Ensures data integrity through JUnit testing.
+    * Implements the Interface Segregation Principle (ISP) by providing a NotificationService interface which allows creating different kinds of notifications like sms,email, etc. It also leverages the Open/Closed
 
 * **Smart Car Rental Management System**
     * Handles car inventory, customer data, and rental/reservation processes.
     * Allows car booking, customer management, and rental tracking.
     * Includes JUnit tests for all rental operations.
+    * esigned for extensibility using the Open/Closed Principle (OCP), allowing easy addition of new vehicle types or pricing models without altering existing code. It also applies the Single Responsibility Principle (SRP) by separating concerns, ensuring booking logic, vehicle management, and pricing each reside in their own dedicated classes.
 
 ## Dependencies
 
