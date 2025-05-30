@@ -1,4 +1,4 @@
-package com.gevernova.ecommerce.model;
+package com.gevernova.ecommercesystem.model;
 
 public enum ProductCategory {
     ELECTRONICS,

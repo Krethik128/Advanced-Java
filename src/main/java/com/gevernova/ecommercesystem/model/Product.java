@@ -1,6 +1,6 @@
-package com.gevernova.ecommerce.model;
+package com.gevernova.ecommercesystem.model;
 
-import com.gevernova.ecommerce.exceptions.InvalidProductException;
+import com.gevernova.ecommercesystem.exceptions.InvalidProductException;
 
 import java.util.UUID;
 

@@ -1,8 +1,9 @@
-package com.gevernova.ecommerce.model;
+package com.gevernova.ecommercesystem.services;
 
-import com.gevernova.ecommerce.exceptions.ProductNotFoundException;
-import com.gevernova.ecommerce.exceptions.ProductQuantityExceededException;
-import com.gevernova.ecommerce.services.Services;
+import com.gevernova.ecommercesystem.exceptions.ProductNotFoundException;
+import com.gevernova.ecommercesystem.exceptions.ProductQuantityExceededException;
+import com.gevernova.ecommercesystem.model.Product;
+import com.gevernova.ecommercesystem.model.Services;
 
 import java.util.ArrayList;
 import java.util.HashMap;

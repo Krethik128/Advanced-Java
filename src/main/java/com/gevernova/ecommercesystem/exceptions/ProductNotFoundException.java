@@ -1,4 +1,4 @@
-package com.gevernova.ecommerce.exceptions;
+package com.gevernova.ecommercesystem.exceptions;
 
 public class ProductNotFoundException extends RuntimeException {
     public ProductNotFoundException(String message) {

@@ -1,6 +1,4 @@
-package com.gevernova.ecommerce.services;
-
-import com.gevernova.ecommerce.model.Product;
+package com.gevernova.ecommercesystem.model;
 
 public interface Services {
     void addProduct(Product product, int quantity);

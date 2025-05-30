@@ -1,6 +1,6 @@
-package com.gevernova.ecommerce.services;
+package com.gevernova.ecommercesystem.services;
 
-import com.gevernova.ecommerce.model.CustomerOrder;
+import com.gevernova.ecommercesystem.model.NotificationService;
 
 public class EmailNotificationService implements NotificationService {
 

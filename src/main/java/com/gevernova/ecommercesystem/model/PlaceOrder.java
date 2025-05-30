@@ -1,6 +1,6 @@
-package com.gevernova.ecommerce.model;
+package com.gevernova.ecommercesystem.model;
 
-import com.gevernova.ecommerce.services.NotificationService;
+import com.gevernova.ecommercesystem.services.CustomerOrder;
 
 import java.util.List;
 

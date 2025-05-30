@@ -1,8 +1,8 @@
 package ecommerceTests;
 
-import com.gevernova.ecommerce.exceptions.*;
-import com.gevernova.ecommerce.model.*;
-import com.gevernova.ecommerce.services.*;
+import com.gevernova.ecommercesystem.exceptions.*;
+import com.gevernova.ecommercesystem.model.*;
+import com.gevernova.ecommercesystem.services.*;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
